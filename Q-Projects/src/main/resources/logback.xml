@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+<property name="log_path" value="appLogs"> </property>
+
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender" >
+ <layout class="ch.qos.logback.classic.PatternLayout">
+ 	<pattern>
+ 	   <!--  %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n  -->
+ 	    %d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n
+ 	</pattern>
+ 	
+ </layout>
+</appender>
+
+
+
+<appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender" >
+  
+  <file>${log_path}/debug.log </file>
+  
+  <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder" >
+    <pattern>
+ 	    %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+ 	</pattern>
+  </encoder>
+  
+  <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log_path}/archived/debug.%d{yyyy-MM-dd}.%i.log </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+       class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" >
+          <maxFileSize>50MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy> 
+  </rollingPolicy>
+</appender>
+
+
+
+<appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender" >
+  <file>${log_path}/error.log </file>
+  <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder" >
+    <pattern>
+ 	    %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+ 	</pattern>
+  </encoder>
+  
+  <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log_path}/archived/error.%d{yyyy-MM-dd}.%i.log </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+       class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP" >
+          <maxFileSize>50MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy> 
+  </rollingPolicy>
+</appender>
+
+<!--  send logs to both console and file audit -->
+
+<logger name="com.anchore" level="debug" additivity="false" >
+	<appender-ref ref="FILE-AUDIT" /> 
+    <appender-ref ref="STDOUT" /> 
+</logger>
+
+
+<root level="error">
+  <appender-ref ref="FILE-ERROR" /> 
+</root>
+
+</configuration>
+
+
